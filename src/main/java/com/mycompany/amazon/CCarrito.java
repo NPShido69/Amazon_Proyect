@@ -41,12 +41,11 @@ public class CCarrito {
         return null;
     }
 
-    // Método para actualizar el stock de un producto
+    // Método para actualizar el stock de un producto (sin guardar automáticamente)
     public void actualizarStock(int codigo, int cantidad) {
         MProductoVendido producto = buscarProducto(String.valueOf(codigo));
         if (producto != null) {
             producto.setStock(cantidad);
-            guardarDatos(); // Guardar los cambios después de actualizar el stock
         }
     }
 
@@ -103,18 +102,9 @@ public class CCarrito {
             JOptionPane.showMessageDialog(null, "Cantidad comprada excede el stock disponible.", "Error", JOptionPane.ERROR_MESSAGE);
             modeloTabla.setValueAt(producto.getCantidadComprada(), rowIndex, 4);
         } else {
-            restarStock(rowIndex, cantidadComprada, modeloTabla);
+            producto.setCantidadComprada(cantidadComprada);
+            modeloTabla.setValueAt(producto.getStock() - cantidadComprada, rowIndex, 2); // Actualiza la columna del stock en la tabla visualmente
         }
-    }
-
-    // Método para restar el stock
-    public void restarStock(int row, int cantidadComprada, DefaultTableModel modeloTabla) {
-        MProductoVendido producto = productos.get(row);
-        int nuevoStock = producto.getStock() - cantidadComprada;
-        producto.setStock(nuevoStock);
-        producto.setCantidadComprada(cantidadComprada);
-        modeloTabla.setValueAt(nuevoStock, row, 2); // Actualiza la columna del stock en la tabla
-        guardarDatos(); // Guardar datos después de restar el stock
     }
 
     // Método para verificar si el código del producto ya existe y devolver el modelo

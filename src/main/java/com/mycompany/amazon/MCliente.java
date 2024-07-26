@@ -1,13 +1,11 @@
 // Clase que representa un cliente
 package com.mycompany.amazon;
 
-import java.io.Serializable;
-
 /**
  * Clase que representa un cliente.
  * Extiende la clase MPersona e implementa Serializable para la persistencia de datos.
  */
-public class MCliente extends MPersona implements Serializable {
+public class MCliente extends MPersona {
 
     private static final long serialVersionUID = 1L; // ID para la compatibilidad de versiones de la clase
 

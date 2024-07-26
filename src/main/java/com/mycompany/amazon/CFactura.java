@@ -1,9 +1,5 @@
 package com.mycompany.amazon;
 
-/**
- *
- * @author Sebastián
- */
 import java.io.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -84,7 +80,7 @@ public class CFactura {
             throw new IllegalStateException("Debe seleccionar un cliente primero.");
         }
 
-        // Actualizar stock de los productos
+        // Actualizar stock de los productos solo después de confirmar la compra
         actualizarStock();
 
         // Lógica para confirmar la factura
