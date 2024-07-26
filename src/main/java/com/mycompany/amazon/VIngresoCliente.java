@@ -2,9 +2,10 @@ package com.mycompany.amazon;
 
 import javax.swing.*;
 import java.awt.event.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
+/**
+ * Clase VIngresoCliente que representa la interfaz para ingresar un nuevo cliente.
+ */
 public class VIngresoCliente extends JFrame implements ActionListener, FocusListener {
     private JTextField txtCedula;
     private JTextField txtNombre;
@@ -144,26 +145,26 @@ public class VIngresoCliente extends JFrame implements ActionListener, FocusList
      * @param e El evento de foco.
      */
     @Override
-public void focusLost(FocusEvent e) {
-    if (e.getSource() == txtCedula) {
-        String cedula = txtCedula.getText();
-        if (cedula.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Ingrese una cédula", "Error", JOptionPane.ERROR_MESSAGE);
-        } else {
-            try {
-                int resultado = controlador.validarCedula(cedula);
-                if (resultado != 0) {
-                    String mensajeError = controlador.getMensajeError(resultado);
-                    JOptionPane.showMessageDialog(this, mensajeError, "Error", JOptionPane.ERROR_MESSAGE);
-                } else if (controlador.cedulaExiste(cedula)) {
-                    JOptionPane.showMessageDialog(this, "Cédula ya existe", "Error", JOptionPane.ERROR_MESSAGE);
+    public void focusLost(FocusEvent e) {
+        if (e.getSource() == txtCedula) {
+            String cedula = txtCedula.getText();
+            if (cedula.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Ingrese una cédula", "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                try {
+                    int resultado = controlador.validarCedula(cedula);
+                    if (resultado != 0) {
+                        String mensajeError = controlador.getMensajeError(resultado);
+                        JOptionPane.showMessageDialog(this, mensajeError, "Error", JOptionPane.ERROR_MESSAGE);
+                    } else if (controlador.cedulaExiste(cedula)) {
+                        JOptionPane.showMessageDialog(this, "Cédula ya existe", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this, "Ocurrió un error al validar la cédula: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Ocurrió un error al validar la cédula: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
-}
 
     @Override
     public void focusGained(FocusEvent e) {

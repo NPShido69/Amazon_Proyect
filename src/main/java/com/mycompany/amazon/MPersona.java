@@ -2,11 +2,14 @@
 package com.mycompany.amazon;
 
 import com.mycompany.amazon.CErrores.CedulaException;
+import java.io.Serializable;
 
 /**
  * Clase que representa una persona.
  */
-public class MPersona {
+public class MPersona implements Serializable {
+
+    private static final long serialVersionUID = 1L; // ID para la compatibilidad de versiones de la clase
 
     private String cedula; // Cédula de la persona
     private String nombre; // Nombre de la persona

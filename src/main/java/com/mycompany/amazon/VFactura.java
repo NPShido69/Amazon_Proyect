@@ -214,17 +214,3 @@ public class VFactura extends JFrame {
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-

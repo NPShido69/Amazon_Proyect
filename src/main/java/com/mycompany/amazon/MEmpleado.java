@@ -1,6 +1,7 @@
 // Clase que representa un empleado
 package com.mycompany.amazon;
 
+//Clase no usada, pero se realizó un ejercicio en clase (calcular la comision de un empleado).
 /**
  * Clase que representa un empleado.
  */
@@ -48,5 +49,3 @@ public class MEmpleado extends MPersona {
         return comisionTotal;
     }
 }
-
-

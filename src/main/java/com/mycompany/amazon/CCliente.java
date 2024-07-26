@@ -1,120 +1,87 @@
-// Clase para controlar los datos del cliente
 package com.mycompany.amazon;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CCliente {
     private List<MCliente> clientes; // Lista de clientes
     private CErrores errores; // Controlador de errores
+    private static final String FILE_PATH = "clientes.ser"; // Archivo para guardar los clientes
 
-    /**
-     * Constructor para inicializar la lista de clientes y el controlador de errores.
-     */
     public CCliente() {
-        this.clientes = new ArrayList<>(); // Inicializar la lista vacía
-        this.errores = new CErrores(); // Inicializar el controlador de errores
+        this.clientes = new ArrayList<>(); 
+        this.errores = new CErrores(); 
+        cargarClientes(); // Cargar los clientes al iniciar
     }
 
-    /**
-     * Método para agregar un cliente a la lista.
-     * @param cliente El cliente a agregar.
-     * @throws IllegalArgumentException si la cédula es inválida o ya existe.
-     * @throws com.mycompany.amazon.CErrores.CedulaException
-     */
-   public void agregarCliente(MCliente cliente) {
-    try {
-        // Validar la cédula
-        int resultado = cliente.validarCedula(cliente.getCedula());
-        if (resultado != 0) {
-            String mensajeError = errores.getMensajeError(resultado);
-            throw new IllegalArgumentException(mensajeError);
-        }
+    public void agregarCliente(MCliente cliente) {
+        try {
+            int resultado = cliente.validarCedula(cliente.getCedula());
+            if (resultado != 0) {
+                String mensajeError = errores.getMensajeError(resultado);
+                throw new IllegalArgumentException(mensajeError);
+            }
 
-        // Verificar si la cédula ya existe
-        if (buscarCliente(cliente.getCedula()) != null) {
-            throw new IllegalArgumentException("La cédula ya existe.");
-        }
-        // Agregar el cliente a la lista
+            if (buscarCliente(cliente.getCedula()) != null) {
+                throw new IllegalArgumentException("La cédula ya existe.");
+            }
 
-        clientes.add(cliente);
-    } catch (Exception e) {
-    } 
-}
+            clientes.add(cliente);
+            guardarClientes(); // Guardar después de agregar un cliente
+        } catch (Exception e) {
+            // Manejo de excepciones
+        } 
+    }
 
-    /**
-     * Método para obtener la lista de clientes.
-     * @return La lista de clientes.
-     */
     public List<MCliente> listarClientes() {
         return clientes;
     }
 
-    /**
-     * Método para buscar un cliente por su cédula.
-     * @param cedula La cédula del cliente a buscar.
-     * @return El cliente encontrado, o null si no se encuentra.
-     */
     public MCliente buscarCliente(String cedula) {
         for (MCliente cliente : clientes) {
             if (cliente.getCedula().equals(cedula)) {
-                return cliente; // Retorna el cliente si se encuentra
+                return cliente;
             }
         }
-        return null; // Retorna null si el cliente no se encuentra
+        return null;
     }
 
-    /**
-     * Método para eliminar un cliente de la lista.
-     * @param cliente El cliente a eliminar.
-     */
     public void eliminarCliente(MCliente cliente) {
         clientes.remove(cliente);
+        guardarClientes(); // Guardar después de eliminar un cliente
     }
 
-    /**
-     * Método para validar la cédula.
-     * @param cedula La cédula a validar.
-     * @return El código de error, o 0 si es válida.
-     */
     public int validarCedula(String cedula) throws CErrores.CedulaException {
         MPersona persona = new MPersona();
         return persona.validarCedula(cedula);
     }
 
-    /**
-     * Método para obtener el mensaje de error correspondiente a un código de error.
-     * @param codigoError El código de error.
-     * @return El mensaje de error.
-     */
     public String getMensajeError(int codigoError) {
         return errores.getMensajeError(codigoError);
     }
 
-    /**
-     * Método para verificar si una cédula ya existe.
-     * @param cedula La cédula a verificar.
-     * @return true si la cédula ya existe, false en caso contrario.
-     */
     public boolean cedulaExiste(String cedula) {
         return buscarCliente(cedula) != null;
     }
+
+    // Método para guardar la lista de clientes
+    private void guardarClientes() {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FILE_PATH))) {
+            oos.writeObject(clientes);
+        } catch (IOException e) {
+            e.printStackTrace(); // Manejar excepción de E/S
+        }
+    }
+
+    // Método para cargar la lista de clientes
+    @SuppressWarnings("unchecked")
+    private void cargarClientes() {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(FILE_PATH))) {
+            clientes = (List<MCliente>) ois.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            clientes = new ArrayList<>(); // Inicializar lista si hay un error
+            e.printStackTrace(); // Manejar excepción de E/S o de clase no encontrada
+        }
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
